@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Sync configuration</comment>
+    <entry key="UrlBase">http://localhost:8080</entry>
+    <entry key="AD_Client_ID">11</entry>
+    <entry key="AD_Org_ID">11</entry>
+    <entry key="OrgValue">GardenWorld</entry>
+    <entry key="C_DocType_ID">135</entry>
+    <entry key="C_DocTypeRefund_ID">135</entry>
+    <entry key="CityName">NotSet</entry>
+    <entry key="AD_Role_ID">102</entry>
+    <entry key="M_Warehouse_ID">103</entry>
+    <entry key="Language">en_ZA</entry>
+    <entry key="UserName">GardenAdmin</entry>
+    <entry key="UserPass">GardenAdmin</entry>
+    <entry key="wsOrderType">UCCreateOrder</entry>
+    <entry key="wsCreateUser">UCCreateUser</entry>
+    <entry key="wsOrderTypeInterval">2.0</entry>    
+    <entry key="wsCreateBPLocation">UCCreateBPLocation</entry>    
+    <entry key="wsCreateLocation">UCCreateLocation</entry>   
+    <entry key="wsCreateBP">UCCreateBP</entry>    
+    <entry key="wsQueryBP">UCQueryBP</entry>    
+    <entry key="wsCompositeOrderType">UCCompositeOrder</entry>    
+    <entry key="wsCreatePosPayment">UCCreatePosPayment</entry>
+    <entry key="wsCompleteOrder">UCCompleteOrder</entry>
+    <entry key="wsCreateOrderLine">UCCreateOrderLine</entry>
+    <entry key="contactName">NotSet</entry>
+    <entry key="email">NotSet@ntier.co.za</entry>
+    <entry key="country">South Africa</entry>
+    <entry key="address1">NotSet</entry>
+    <entry key="city">NotSet</entry>
+ </properties>
