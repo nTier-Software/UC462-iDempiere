@@ -78,7 +78,7 @@ public class BuildNewOrQueryBP {
         compositeOperation.addOperation(createUser);
     }
 
-    int queryBpRecordId(TicketInfo ticket, Properties erpProperties) {
+    int queryBpID(TicketInfo ticket, Properties erpProperties) {
         QueryDataRequest query = new QueryDataRequest();
         SendWsRequest sendWsRequest  = new SendWsRequest();
         query.setWebServiceType(erpProperties.getProperty("wsQueryBP"));

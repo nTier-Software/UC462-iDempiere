@@ -526,7 +526,7 @@ public class JRootApp extends JPanel implements AppView, DeviceMonitorEventListe
         String m_allowsync = m_props.getProperty("AllowSync");
 
         if (!(m_allowsync == null)
-                && !m_allowsync.isEmpty() && (m_allowsync.compareToIgnoreCase("Y") == 0) && !(m_dlSystem.getResourceAsProperties("erp.properties").isEmpty()));
+                && !m_allowsync.isEmpty() && (m_allowsync.compareToIgnoreCase("Y") == 0) && !(m_dlSystem.getResourceAsProperties("erp.properties").isEmpty()))
         {
             SyncOrders syncOrders = new SyncOrders(this);
             syncOrders.start();

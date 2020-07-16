@@ -32,10 +32,6 @@ import com.openbravo.pos.payment.PaymentInfo;
 import com.openbravo.pos.ticket.ProductInfoExt;
 import com.openbravo.pos.ticket.TicketInfo;
 import com.openbravo.pos.ticket.TicketLineInfo;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
@@ -54,10 +50,7 @@ import org.idempiere.webservice.client.request.CreateDataRequest;
 import org.idempiere.webservice.client.request.SetDocActionRequest;
 import org.idempiere.webservice.client.response.CompositeResponse;
 import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
+import org.idempiere.webservice.client.request.QueryDataRequest;
 import static java.lang.Thread.sleep;
 import static java.lang.Thread.sleep;
 import static java.lang.Thread.sleep;
@@ -195,16 +188,23 @@ public class SyncOrders extends Thread {
             dataOrderLine.addField("AD_Org_ID", "@C_Order.AD_Org_ID");
             dataOrderLine.addField("C_Order_ID", "@C_Order.C_Order_ID");
 
-            ProductInfoExt productinfo = null;
+            ProductInfoExt productInfo = null;
             try {
-                productinfo = dlintegration.getProductInfo(line.getProductID());
+                productInfo = dlintegration.getProductInfo(line.getProductID());
             } catch (BasicException ex) {
                 Logger.getLogger(SyncOrders.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //Lookup product via name
-            Field field = new Field("M_Product_ID");
-            field.setLval(productinfo.getName());
-            dataOrderLine.addField(field);
+            
+            Field field;
+            int ProductID = queryProductID(productInfo, erpProperties);
+            if (ProductID != 0) {
+                dataOrderLine.addField("M_Product_ID", ProductID);
+            } else {
+                //Lookup product via name
+                field = new Field("M_Product_ID");
+                field.setLval("Standard");
+                dataOrderLine.addField(field);
+            }
 
             dataOrderLine.addField("QtyOrdered", Double.toString(Math.abs(line.getMultiply())));
             dataOrderLine.addField("QtyEntered", Double.toString(Math.abs(line.getMultiply())));
@@ -215,7 +215,7 @@ public class SyncOrders extends Thread {
             field = new Field("C_Tax_ID");
             field.setLval(line.getTaxInfo().getName());
             dataOrderLine.addField(field);
-            
+
             createOrderLine.setDataRow(dataOrderLine);
             compositeOperation.addOperation(createOrderLine);
         }
@@ -240,7 +240,7 @@ public class SyncOrders extends Thread {
 
         BuildNewOrQueryBP buildNewOrQueryBP = new BuildNewOrQueryBP();
 
-        int RecordId = new BuildNewOrQueryBP().queryBpRecordId(ticket, erpProperties);
+        int RecordId = new BuildNewOrQueryBP().queryBpID(ticket, erpProperties);
         if (RecordId != 0) {
             data.addField("C_BPartner_ID", RecordId);
         } else {
@@ -283,6 +283,18 @@ public class SyncOrders extends Thread {
         compositeOperation.addOperation(createDocAction);
     }
 
+    int queryProductID(ProductInfoExt productInfo, Properties erpProperties) {
+        QueryDataRequest query = new QueryDataRequest();
+        SendWsRequest sendWsRequest = new SendWsRequest();
+        query.setWebServiceType(erpProperties.getProperty("wsQueryProduct"));
+        query.setLogin(sendWsRequest.getLogin(erpProperties));
+        DataRow dataRow = new DataRow();
+        dataRow.addField("AD_Client_ID", erpProperties.getProperty("AD_Client_ID"));
+        dataRow.addField("Name", "%" + productInfo.getName() + "%");
+        query.setDataRow(dataRow);
+        return sendWsRequest.sendWsQueryRequest(query, erpProperties);
+    }
+
     protected static double round(double value, int places) {
         if (places < 0) {
             throw new IllegalArgumentException();
@@ -300,20 +312,6 @@ public class SyncOrders extends Thread {
     public long converter(Double min) {
         long millis = (long) (min * 60 * 1000);
         return millis;
-    }
-
-    private String getHostName() {
-        Properties m_propsconfig = new Properties();
-        File file = new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + ".properties");
-        try {
-            InputStream in;
-            in = new FileInputStream(file);
-            m_propsconfig.load(in);
-            in.close();
-        } catch (IOException e) {
-
-        }
-        return m_propsconfig.getProperty("machine.hostname");
     }
 
 }
