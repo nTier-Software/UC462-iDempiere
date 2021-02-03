@@ -26,10 +26,10 @@ public class BuildNewOrQueryBP {
         Field field = new Field("C_Country_ID");
         field.setLval(SyncOrders.isBlankOrNull(ticket.getCustomer().getCountry()) ? erpProperties.getProperty("country") : ticket.getCustomer().getCountry());
         data.addField(field);
-        data.addField("Address1", SyncOrders.isBlankOrNull(ticket.getCustomer().getCountry()) ? erpProperties.getProperty("address1") : ticket.getCustomer().getAddress());
+        data.addField("Address1", SyncOrders.isBlankOrNull(ticket.getCustomer().getAddress()) ? erpProperties.getProperty("address1") : ticket.getCustomer().getAddress());
         data.addField("Address2", ticket.getCustomer().getAddress2());
         data.addField("Postal", ticket.getCustomer().getPcode());
-        data.addField("City", SyncOrders.isBlankOrNull(ticket.getCustomer().getCountry()) ? erpProperties.getProperty("city") : ticket.getCustomer().getCity());
+        data.addField("City", SyncOrders.isBlankOrNull(ticket.getCustomer().getCity()) ? erpProperties.getProperty("city") : ticket.getCustomer().getCity());
         createLocation.setDataRow(data);
         compositeOperation.addOperation(createLocation);
         createBPLocation(compositeOperation, ticket, erpProperties);

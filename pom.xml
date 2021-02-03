@@ -509,10 +509,10 @@
     <finalName>unicentaopos</finalName>
   </build>
   <repositories>
-    <repository>
+    <!--<repository>
       <id>spring-repo</id>
       <url>https://repo.spring.io/plugins-release/</url>
-    </repository>
+    </repository> -->
     <repository>
       <id>unicenta-repo</id>
       <url>http://repo.unicenta.org/maven2/</url>

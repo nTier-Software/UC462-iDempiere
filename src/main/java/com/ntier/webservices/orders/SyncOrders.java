@@ -54,13 +54,6 @@ import org.idempiere.webservice.client.request.CreateDataRequest;
 import org.idempiere.webservice.client.request.SetDocActionRequest;
 import org.idempiere.webservice.client.response.CompositeResponse;
 import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
 
 public class SyncOrders extends Thread {
 
@@ -215,7 +208,7 @@ public class SyncOrders extends Thread {
             field = new Field("C_Tax_ID");
             field.setLval(line.getTaxInfo().getName());
             dataOrderLine.addField(field);
-            
+
             createOrderLine.setDataRow(dataOrderLine);
             compositeOperation.addOperation(createOrderLine);
         }
@@ -264,7 +257,12 @@ public class SyncOrders extends Thread {
 
         data.addField("DocumentNo", Integer.toString(ticket.getTicketId()));
         data.addField("DateOrdered", new java.sql.Timestamp(datenew.getTime().getTime()).toString());
-        data.addField("SalesRep_ID", Integer.valueOf(ticket.getUser().getId()));
+        //data.addField("SalesRep_ID", Integer.valueOf(ticket.getUser().getId()));
+
+        //Lookup SalesRep_ID via name
+        Field field = new Field("SalesRep_ID");
+        field.setLval(ticket.getUser().getName());
+        data.addField(field);
 
         List<PaymentInfo> payments = ticket.getPayments();
         data.addField("PaymentRule", (payments.get(0).getName().equals(UCTenderType_CREDIT)) ? "P" : "M");
@@ -278,7 +276,7 @@ public class SyncOrders extends Thread {
         createDocAction.setWebServiceType(erpProperties.getProperty("wsCompleteOrder"));
         createDocAction.setRecordID(0);
         createDocAction.setRecordIDVariable("@C_Order.C_Order_ID");
-        createDocAction.setDocAction(DocAction.Complete);
+        createDocAction.setDocAction(DocAction.Prepare);
 
         compositeOperation.addOperation(createDocAction);
     }
